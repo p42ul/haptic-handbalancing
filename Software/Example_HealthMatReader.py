@@ -1,13 +1,15 @@
 import numpy as np
+import matplotlib as plt
 import serial
 import sys
 import time
 
+plt.style.use('_mpl-gallery-nogrid')
 
 # This connects to serial
 ser = serial.Serial(
     #You might change the PORT corresponding to the assigned by Operative System
-    '/dev/tty.usbmodem101269201',  # raspberry: '/dev/ttyUSB1'
+    '/dev/cu.usbmodem104742601',  # raspberry: '/dev/ttyUSB1'
     baudrate=115200,
     timeout=0.1)
 
@@ -86,6 +88,13 @@ def printMatrix():
             tmp = tmp +   hex(int(Values[i][j]))[-1]
         print(tmp)
     print("\n")
+
+def generatePlot(Z):
+    fig, ax = plt.subplots()
+
+    ax.contourf(Z, levels=np.linspace(Z.min(), Z.max(), 7))
+
+    plt.show()
    
 #Main
 
@@ -93,6 +102,7 @@ def printMatrix():
 while True:
     getMatrix() # This function requests and parses a pressure map in the variable Values    
     printMatrix()
+    generatePlot(Values)
     # time.sleep(1)
 
 
