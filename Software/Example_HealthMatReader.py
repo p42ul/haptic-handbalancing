@@ -1,10 +1,13 @@
 import numpy as np
-import matplotlib as plt
+import matplotlib.pyplot as plt
 import serial
 import sys
 import time
 
-plt.style.use('_mpl-gallery-nogrid')
+CONTOUR = False
+
+if not CONTOUR:
+    plt.style.use('_mpl-gallery-nogrid')
 
 # This connects to serial
 ser = serial.Serial(
@@ -19,6 +22,7 @@ ROWS = 48  # Rows of the sensor
 COLS = 48  # Columns of the sensor
 
 # Variable declaration
+# Initialize empty matrix, you ninny (above)
 Values = np.zeros((ROWS, COLS))
 
 
@@ -82,6 +86,21 @@ def getMatrix():
     activePointsGetMap()
 
 def printMatrix():
+    tmparray = np.zeros((ROWS, COLS))
+    for i in range(COLS):
+        tmp = ""
+        for j in range(ROWS):
+            tmp = int(Values[i][j])
+            # print(tmp, "\n")
+            # print(tmp, sep="", end="")
+            tmparray[i][j] = tmp
+            # print(tmp, sep="", end="")
+        # printArray(tmparray[i])
+        # print("")
+    if not CONTOUR:
+        plt.ion()
+        generatePlot(tmparray)
+    print("\n")
     for i in range(COLS):
         tmp = ""
         for j in range(ROWS):
@@ -90,11 +109,18 @@ def printMatrix():
     print("\n")
 
 def generatePlot(Z):
+    print(Z.shape)
     fig, ax = plt.subplots()
 
-    ax.contourf(Z, levels=np.linspace(Z.min(), Z.max(), 7))
+    ax.contourf(np.arange(0, ROWS), np.arange(0, COLS), Z, levels=np.linspace(0, 15))
 
-    plt.show()
+    plt.draw()
+    plt.pause(0.0001)
+    plt.clf()
+
+def printArray(A):
+    for item in A:
+        print(item, sep="", end="")
    
 #Main
 
@@ -102,7 +128,6 @@ def generatePlot(Z):
 while True:
     getMatrix() # This function requests and parses a pressure map in the variable Values    
     printMatrix()
-    generatePlot(Values)
     # time.sleep(1)
 
 
