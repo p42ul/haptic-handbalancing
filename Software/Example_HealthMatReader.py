@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import serial
 import sys
 import time
+import cv2
 
 CONTOUR = False
 
@@ -98,7 +99,6 @@ def printMatrix():
         # printArray(tmparray[i])
         # print("")
     if not CONTOUR:
-        plt.ion()
         generatePlot(tmparray)
     print("\n")
     for i in range(COLS):
@@ -109,10 +109,10 @@ def printMatrix():
     print("\n")
 
 def generatePlot(Z):
-    print(Z.shape)
-    fig, ax = plt.subplots()
+    plt.ion()
+    fig, ax = plt.subplots(figsize=(5,5))
 
-    ax.contourf(np.arange(0, ROWS), np.arange(0, COLS), Z, levels=np.linspace(0, 15))
+    ax.contourf(np.arange(0, ROWS), np.arange(0, COLS), Z, levels=7, cmap="nipy_spectral")
 
     plt.draw()
     plt.pause(0.0001)
