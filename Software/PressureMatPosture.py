@@ -15,8 +15,8 @@ if CONTOUR:
 
 ser = serial.Serial(
     #You might change the PORT corresponding to the assigned by Operative System
-     '/dev/cu.usbmodem101269201',  # raspberry: '/dev/ttyUSB1'
-    #getPort(),
+     #'/dev/cu.usbmodem101269201',  # raspberry: '/dev/ttyUSB1'
+    getPort(),
     baudrate=115200,
     timeout=0.1)
 
@@ -31,9 +31,9 @@ Values = np.zeros((ROWS, COLS))
 
 def getPort():
     print("Getting port")
-    PORT = subprocess.run(['ls', '/dev/cu*'], stdout=subprocess.PIPE)
+    PORT = serial.tools.list_ports.grep("\/dev\/(cu|tty).usbmodem[0-9]{9}")
     PORT.stdout
-    #return PORT
+    return PORT
 
 def RequestPressureMap():
     data = "R"
